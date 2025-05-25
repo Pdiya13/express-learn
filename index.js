@@ -46,13 +46,13 @@ app.get("/:username/:id",(req,res)=> //path parameters
 })
 
 
-// app.get("/search",(req,res)=>  //query param in path localhost:3000/search?q=apple&color=green
+// app.get("/search",(req,res)=>  //query params   localhost:3000/search?q=apple&color=green
 // {
 //     console.log(res.query);
 //     res.send("no results");
 // })
 
-app.get("/search",(req,res)=>  // in path localhost:3000/search?q=apple&color=green
+app.get("/search",(req,res)=>  //localhost:3000/search?q=apple&color=green
 {
     let {q,color} = req.query;
     res.send(`search result for query: ${q} ${color}`);
