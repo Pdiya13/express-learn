@@ -75,33 +75,23 @@ app.put("/:id", function(req,res)
 
     if(user)
     {
-        const {h} = req.body;
-        for(let i=0;i<user.kidneys.length;i++)
-        {
-            user.kidneys[i].healthy = h;
-        }
-        res.json(user); 
+      if(findUnhealthyKidney(user))
+      {
+          for(let i=0;i<user.kidneys.length;i++)
+          {
+              user.kidneys[i].healthy = {healthy : "true"};
+          }
+          res.json(user);
+      }
+      else{
+        res.status(411).json({msg : "You have no unhelathy kidneys"});
+      }
     }
     else {
         res.status(404).json({ message: "User not found" });
       }
 });
 
-
-// app.delete("/:id", function(req,res)
-// {
-//     const id = parseInt(req.params.id);
-//     const user = users.find(u => u.id === id);
-
-//     if(user)
-//     {
-//         users.filter(u => u.id !== id);
-//         res.send(users);
-//     }
-//     else{
-//         res.send(404).json({ message: "User not found" });
-//     }
-// });
 
 app.delete("/:id", function(req, res) {
   const id = parseInt(req.params.id);
@@ -112,19 +102,41 @@ app.delete("/:id", function(req, res) {
   }
 
   const user = users[index];
+  if(findUnhealthyKidney(user))
+  {
+    const newKidneys = [];
+    for (let i = 0; i < user.kidneys.length; i++) {
+      if (user.kidneys[i].healthy) {
+        newKidneys.push({ healthy: true });
+      }
+    }
 
-  const newKidneys = [];
-  for (let i = 0; i < user.kidneys.length; i++) {
-    if (user.kidneys[i].healthy) {
-      newKidneys.push({ healthy: true });
+    user.kidneys = newKidneys;
+
+    res.json({ msg: "Unhealthy kidneys deleted", user });
+  }
+  else{
+    res.status(411).json(
+      {
+        msg : "You have no Unhealthy Kidneys",
+      }
+    ) 
+  }
+  
+});
+
+//find that there is atleast one unhealty kidheny
+function findUnhealthyKidney(user){
+  let UnhealthyKidneys = false;
+  for(let i =0;i<user.kidneys.length;i++)
+  {
+    if(!user.kidneys[i].healthy)
+    {
+      UnhealthyKidneys = true
     }
   }
 
-  user.kidneys = newKidneys;
-
-  res.json({ msg: "Unhealthy kidneys deleted", user });
-});
-
-  
+  return UnhealthyKidneys;
+}
 
 app.listen(3000);
