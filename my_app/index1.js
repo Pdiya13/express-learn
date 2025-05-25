@@ -13,6 +13,12 @@ const users = [
       id: 2,
       name: "alice",
       kidneys: [{ healthy: true }, { healthy: true }],
+    },
+    {
+      id: 3,
+      name: "john",
+      kidneys : [],
+
     }
   ];
 
@@ -98,16 +104,27 @@ app.put("/:id", function(req,res)
 // });
 
 app.delete("/:id", function(req, res) {
-    const id = parseInt(req.params.id);
-    const index = users.findIndex(u => u.id === id);
-  
-    if (index !== -1) {
-      users.splice(index, 1); // removes 1 element at 'index'
-      res.json(users);
-    } else {
-      res.status(404).json({ message: "User not found" });
+  const id = parseInt(req.params.id);
+  const index = users.findIndex(u => u.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const user = users[index];
+
+  const newKidneys = [];
+  for (let i = 0; i < user.kidneys.length; i++) {
+    if (user.kidneys[i].healthy) {
+      newKidneys.push({ healthy: true });
     }
-  });
+  }
+
+  user.kidneys = newKidneys;
+
+  res.json({ msg: "Unhealthy kidneys deleted", user });
+});
+
   
 
 app.listen(3000);
