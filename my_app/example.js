@@ -46,9 +46,9 @@ app.get("/ride1",isOldEnoughMiddleware,function(req,res)
    res.send("you have successfully riden the ride-1 ");
 })
 
-// app.use(isOldEnoughMiddleware); // this is another way for definig middlewares but it is
-//                                 // works only for the routes defines below it.so you don't
-//                                 // need to seprately mention in every routes.
+app.use(isOldEnoughMiddleware); // this is another way for definig middlewares but it is
+                                // works only for the routes defines below it.so you don't
+                                // need to seprately mention in every routes.
 
 app.get("/ride2",isOldEnoughMiddleware,function(req,res)
 {
