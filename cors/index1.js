@@ -1,4 +1,9 @@
 //used to do --> npm install cors 
+
+// CORS (Cross-Origin Resource Sharing) is used when your frontend and backend are on 
+// different origins (i.e., different domains, ports, or protocols), and you want them to 
+// communicate securely.
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
